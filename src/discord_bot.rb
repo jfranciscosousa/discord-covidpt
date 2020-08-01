@@ -10,15 +10,18 @@ module DiscordBot
   puts "Click on it to invite it to your server"
 
   @bot.message(start_with: "!covidpt ") do |event|
-    argument = event.content.delete_prefix("!covidpt").strip
+    region = event.content.delete_prefix("!covidpt").strip
 
-    response = if argument == "all"
-                 Covid.overall_report
+    response = if region == "all"
+                 Covid.todays_overall_report
                else
-                 Covid.report_by_region(argument)
+                 Covid.todays_region_report(region)
                end
 
     event.respond(response)
+
+  rescue CustomError
+    event.respond "No report for that date! Check back later."
   end
 
   def self.run

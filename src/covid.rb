@@ -1,49 +1,27 @@
 class Covid
   class << self
-    # rubocop:disable Metrics/AbcSize
-    def overall_report
-      report = fetch_todays_report[:overall]
+    def todays_overall_report
+      report = fetch_todays_report
 
-      <<~MESSAGE
-        ** BY REGION **
-
-        Cases in the North: #{report[:cases_in_north]}
-        Deaths in the North: #{report[:deaths_in_north]}
-
-        Cases in the Centre: #{report[:cases_in_centre]}
-        Deaths in the Centre: #{report[:deaths_in_centre]}
-
-        Cases in the Lisbon: #{report[:cases_in_lisbon]}
-        Deaths in the Lisbon: #{report[:deaths_in_lisbon]}
-
-        Cases in the Alentejo: #{report[:cases_in_alentejo]}
-        Deaths in the Alentejo: #{report[:deaths_in_alentejo]}
-
-        Cases in the Algarve: #{report[:cases_in_algarve]}
-        Deaths in the Algarve: #{report[:deaths_in_algarve]}
-
-        Cases in Azores: #{report[:cases_in_azores]}
-        Deaths in Azores: #{report[:deaths_in_azores]}
-
-        Cases in Madeira: #{report[:cases_in_madeira]}
-        Deaths in Madeira: #{report[:deaths_in_madeira]}
-
-        ** TOTALS **
-
-        Total cases: #{report[:total_confirmed_cases]}
-        Total deaths: #{report[:total_deaths]}
-
-        Cases under suspicious: #{report[:total_under_suspicion]}
-        Awaiting lab results: #{report[:awaiting_lab_results]}
-      MESSAGE
+      generate_all_report(report)
     end
-    # rubocop:enable Metrics/AbcSize
 
-    def report_by_region(region)
-      report = fetch_todays_report[:regional]
-      cases_in_region = report[region]
+    def todays_region_report(region)
+      report = fetch_todays_report
 
-      cases_in_region ? "Total cases in #{region}: #{cases_in_region}" : "No data for region"
+      generate_region_report(report, region)
+    end
+
+    def between_overall_report(start_date, end_date)
+      report = fetch_report_between(start_date, end_date)
+
+      generate_all_report(report)
+    end
+
+    def between_region_report(start_date, end_date, region)
+      report = fetch_report_between(start_date, end_date)
+
+      generate_region_report(report, region)
     end
 
     private
@@ -54,7 +32,59 @@ class Covid
 
       CovidPT.at(today)
     rescue StandardError
-      event.respond "No report for that date! Check back later."
+      raise CustomError
+    end
+
+    def fetch_report_between(start_date, end_date)
+      CovidPT.compare(start_date, end_date)
+    rescue StandardError => e
+      puts e
+      raise CustomError
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    def generate_all_report(report)
+      all_report = report[:overall]
+
+      <<~MESSAGE
+        ** BY REGION **
+
+        Cases in the North: #{all_report[:cases_in_north]}
+        Deaths in the North: #{all_report[:deaths_in_north]}
+
+        Cases in the Centre: #{all_report[:cases_in_centre]}
+        Deaths in the Centre: #{all_report[:deaths_in_centre]}
+
+        Cases in the Lisbon: #{all_report[:cases_in_lisbon]}
+        Deaths in the Lisbon: #{all_report[:deaths_in_lisbon]}
+
+        Cases in the Alentejo: #{all_report[:cases_in_alentejo]}
+        Deaths in the Alentejo: #{all_report[:deaths_in_alentejo]}
+
+        Cases in the Algarve: #{all_report[:cases_in_algarve]}
+        Deaths in the Algarve: #{all_report[:deaths_in_algarve]}
+
+        Cases in Azores: #{all_report[:cases_in_azores]}
+        Deaths in Azores: #{report[:deaths_in_azores]}
+
+        Cases in Madeira: #{all_report[:cases_in_madeira]}
+        Deaths in Madeira: #{all_report[:deaths_in_madeira]}
+
+        ** TOTALS **
+
+        Total cases: #{all_report[:total_confirmed_cases]}
+        Total deaths: #{all_report[:total_deaths]}
+
+        Cases under suspicious: #{all_report[:total_under_suspicion]}
+        Awaiting lab results: #{all_report[:awaiting_lab_results]}
+      MESSAGE
+    end
+    # rubocop:enable Metrics/AbcSize
+
+    def generate_region_report(report, region)
+      cases_in_region = report[:regional][region]
+
+      cases_in_region ? "Total cases in #{region}: #{cases_in_region}" : "No data for region"
     end
   end
 end
