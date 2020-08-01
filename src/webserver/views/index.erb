@@ -13,18 +13,52 @@
         color: #444;
         padding: 0 10px;
       }
+
+      pre {
+        display: flex;
+        flex-direction: column;
+      }
+
+      code {
+        padding: 1rem;
+        background-color: lightgrey;
+      }
+
+      footer {
+        margin-top: 5rem;
+      }
     </style>
   </head>
   <body>
-    <h1>Greatest Bot</h1>
+    <h1>CovidPT Discord Bot</h1>
+
     <p>
-      I am the greatest bot. Add me to your server with my glorious
+      A bot to fetch numbers about the current COVID-19 pandemic on Portugal. Reports are
+      fetched from a government website. Check them
+      <a href="https://covid19.min-saude.pt/relatorio-de-situacao/">here</a>.
+    </p>
+
+    <p>I'm using my friend Fernando's gem to get the data. Check it <a href="https://github.com/frm/covid_pt">here</a></p>
+
+    <p>
+      Add me to your server with my
       <a href=<%= @url %>>invite url</a>.
     </p>
 
     <p>
-      This is a good place to post instructions on how
-      to use your bot by the way!
+      How to use:
     </p>
+
+    <pre>
+      <code># to get overall info</code>
+      <code>!covidpt all</code>
+
+      <code># to get info for a region</code>
+      <code>!covidpt Braga</code>
+    </pre>
+
+    <footer>
+      <p>Made by <a href="https://jfranciscosousa.com">Francisco</a></p>
+    </footer>
   </body>
 </html>

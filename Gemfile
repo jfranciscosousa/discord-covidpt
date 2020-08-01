@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 ruby "2.7.1"
 
+gem "covid_pt"
 gem "discordrb"
 gem "dotenv"
 gem "foreman"
