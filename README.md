@@ -1,5 +1,7 @@
 # Covid PT discord bot
 
+**UPDATE: Most COVID API are borked because of the lack of standards on government updates. Also updates are now weekly. I will stop mantaining this because of these inconsistencies.**
+
 A discord bot powered by Fernando's [covid_pt library](https://github.com/frm/covid_pt).
 
 This bot fetches numbers about the current COVID-19 pandemic on Portugal. Reports are fetched from a government website. Check them [here](https://covid19.min-saude.pt/relatorio-de-situacao/).
